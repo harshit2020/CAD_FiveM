@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOLO FORM</title>
+    <style>
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input {
+            width: 50%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+    </style>
+</head>
+<body>
+    <div style="display: flex; justify-content: center; align-items: center;flex-direction: column;">
+        <h1>SHIFT TRACKER</h1>
+        <h3>YOUR ACTIVITY</h3>
+        <div id ="buttons">
+            <button onclick="openstats()" style="margin-bottom: 10px; margin-right: 10px; font-size: 20px;">Statistics</button>
+            <button onclick="openlog()" style="margin-bottom: 10px; font-size: 20px;">Shift Log</button>
+        </div>
+    </div>
+    <!-- Statistics -->
+    <div id = "stats_info">
+        <button id="hideFormButton" onclick="hidestats()" style="margin-bottom: 10px;">Back</button>
+        <div id = "stats"class="input-container">
+            <div>
+                <label for="input1">Last 24 hours</label>
+                <input type="text" id="input1" name="input1" placeholder="0 seconds" required>
+            </div>
+            
+            <div>
+                <label for="input2">Last 7 days</label>
+                <input type="text" id="input2" name="input2" placeholder="0 seconds" required>
+            </div>
+            
+            <div>
+                <label for="input3">Total</label>
+                <input type="text" id="input3" name="input3" placeholder="0 seconds" required>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Shift Log table -->
+    <script>
+    
+    document.getElementById("stats").style.display='none';
+    document.getElementById("stats_info").style.display='none';
+    function openstats(){
+        document.getElementById("stats_info").style.display='block';
+        document.getElementById("stats").style.display='flex';
+        document.getElementById("stats").style.flexDirection='row';
+        document.getElementById("buttons").style.display='none';
+    }
+    function hidestats(){
+        document.getElementById("stats").style.display='none';
+        document.getElementById("stats_info").style.display='none';
+        document.getElementById("buttons").style.display='block';
+    }
+    </script>
+</body>
+</html>

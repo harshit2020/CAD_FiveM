@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        div{
+            display: none;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f4;
+            background-image: url('img2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            overflow: hidden;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        #upperIframe {
+            background-color: #eee;
+            height: 50vp;
+        }
+
+        #lowerIframe {
+            background-color: #fff;
+            height: 50vp;
+        }
+
+        .button-div {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 80%;
+            background-color: #ddd;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            padding: 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .unit-div,.bolo-div {
+            width: 80%;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            display: none;
+        }
+
+    </style>
+</head>
+
+<!---------- TABLE BUTTON DIVISION ---------->
+
+<div id="table" style="width: 90%; padding-left: 20%;">
+    <div class="button-div">
+        <button class="button" onclick="showContent('LEO')">LEO</button>
+        <button class="button" onclick="showContent('AMB')">AMBULANCE</button>
+        <button class="button" onclick="showContent('DEPT')">DEPT. OF TRANSPORT</button>
+    </div>
+    
+    <div class="unit-div" id="leounit">
+        <p>LEO UNITS</p>
+    </div>
+    
+    <div class="bolo-div" id="leobolo">
+        <p>LEO BOLOS</p>
+    </div>
+    
+    <div class="unit-div" id="ambunit">
+        <p>AMB UNITS</p>
+    </div>
+    
+    <div class="bolo-div" id="ambbolo">
+        <p>AMB BOLOS</p>
+    </div>
+    
+    <div class="unit-div" id="deptunit">
+        <p>DEPT UNITS</p>
+    </div>
+    
+    <div class="bolo-div" id="deptbolo">
+        <p>DEPT BOLOS</p>
+    </div>
+</div>
+
+<!---------- BOLO BUTTON DIVISION ---------->
+
+<div id="bolo">
+    <iframe id="upperIframe" src="boloform.html" style="overflow: hidden;"></iframe>
+    <iframe id="lowerIframe" src="bolotable.html" style="overflow: hidden;"></iframe>
+</div>
+
+<!---------- WARRANT BUTTON DIVISION ---------->
+
+<div id="warrant">
+    <iframe id="upperIframe" src="warrantform.html"  style="overflow: hidden;"></iframe>
+    <iframe id="lowerIframe" src="warranttable.html" style="overflow: hidden;"></iframe>
+</div>
+
+<!---------- ACTIVITY BUTTON DIVISION ---------->
+
+<div id="activity">
+    <iframe id="upperIframe" src="strackeryour.html" style="overflow: hidden;"></iframe>
+    <iframe id="lowerIframe" src="strackerother.html" style="overflow: hidden;"></iframe>
+</div>
+
+<!---------- SCRIPT BODY AREA ---------->
+
+<body>
+    <script>
+        document.addEventListener('keydown', function(event) {
+        if (event.key == "Escape") {
+                console.log("Inside Show Area Escape Event")
+                const modal = parent.parent.document.getElementById('mdtModal');
+                modal.style.display = 'none';
+        }});
+        function showContent(contentType) {
+            var unit,bolo;
+            document.getElementById('leounit').style.display = 'none';
+            document.getElementById('leobolo').style.display = 'none';
+            document.getElementById('ambunit').style.display = 'none';
+            document.getElementById('ambbolo').style.display = 'none';
+            document.getElementById('deptunit').style.display = 'none';
+            document.getElementById('deptbolo').style.display = 'none';
+            if (contentType === 'LEO') {
+                unit=document.getElementById('leounit');
+                bolo=document.getElementById('leobolo');
+                unit.style.display = 'block';
+                bolo.style.display = 'block';
+            } else if (contentType === 'AMB') {
+                unit=document.getElementById('ambunit');
+                bolo=document.getElementById('ambbolo');
+                unit.style.display = 'block';
+                bolo.style.display = 'block';
+            } else if (contentType === 'DEPT') {
+                unit=document.getElementById('deptunit');
+                bolo=document.getElementById('deptbolo');
+                unit.style.display = 'block';
+                bolo.style.display = 'block';
+            }
+        }
+        function showtablefnc(){
+            document.getElementById("table").style.display = "block";
+            document.getElementById("bolo").style.display = "none";
+            document.getElementById("warrant").style.display = "none";
+            document.getElementById("activity").style.display = "none";
+        }
+        function showbolofnc(){
+            document.getElementById("table").style.display = "none";
+            document.getElementById("bolo").style.display = "block";
+            document.getElementById("warrant").style.display = "none";
+            document.getElementById("activity").style.display = "none";
+        }
+        function showwarrantfnc(){
+            document.getElementById("activity").style.display = "none";
+            document.getElementById("table").style.display = "none";
+            document.getElementById("bolo").style.display = "none";
+            document.getElementById("warrant").style.display = "block";
+        }
+        function showactivity(){
+            document.getElementById("activity").style.display = "block";
+            document.getElementById("table").style.display = "none";
+            document.getElementById("bolo").style.display = "none";
+            document.getElementById("warrant").style.display = "none";
+        }
+    </script>
+</body>
+</html>

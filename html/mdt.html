@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Terminal</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #283e46;
+        }
+
+        #login-container, #register-container {
+            background-color: #3d4f56;
+            padding: 20px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="login-container" style="display: block;">
+    <h3 style="color: #ffffff;">Login</h3>
+    <form id="auth-form">
+        <label for="username">Username:</label>
+        <input type="text" id="username" placeholder="Smiling Maniac">
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="********">
+        <br>
+        <button type="button" onclick="authenticate()">Login</button>
+    </form>
+</div>
+
+<!--<div id="register-container" style="display:none;">
+    <h3 style="color: #ffffff;">Register</h3>
+    <form id="register-form">
+        <label for="regUsername">Username:</label>
+        <input type="text" id="regUsername" required>
+        <br>
+        <label for="regPassword">Password:</label>
+        <input type="password" id="regPassword" required>
+        <br>
+        <button type="button" onclick="registerUser()">Register</button>
+        <button type="button" onclick="showLoginForm()">Back to Login</button>
+    </form>
+</div>-->
+
+<script>
+    document.addEventListener('keydown', function(event) {
+        if (event.key == "Escape") {
+                hidemdt();
+        }});
+
+    function hidemdt(){
+        const modal = parent.document.getElementById('mdtModal');
+        modal.style.display = 'none';
+        }
+        
+    function authenticate() {
+        window.location.href = 'trdash.html';
+    }
+
+    /*window.addEventListener('message', event => {
+        console.log(event.data.data)
+        switch(event.data.type) {
+            case "login_success":
+                    //
+            break;
+            case "login_failure":
+                    //
+            break;
+            case 'registration_success' :
+                    console.log("Suckesss");
+                    document.getElementById("register-container").style.display = "none";
+                    document.getElementById("login-container").style.display = "block";
+            break;
+            case "registration_failure":
+                    //
+            break;
+            }
+        });
+
+    function showRegisterForm() {
+        document.getElementById("login-container").style.display = "none";
+        document.getElementById("register-container").style.display = "block";
+    }
+
+    function showLoginForm() {
+        document.getElementById("register-container").style.display = "none";
+        document.getElementById("login-container").style.display = "block";
+    }
+
+    function registerUser() {
+        var username = document.getElementById("regUsername").value;
+        var password = document.getElementById("regPassword").value;
+        var userCredentials = {
+        [username]: password,
+        };
+        fetch('https://' + 'CAD-'+ '/cad_Register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userCredentials),
+        });
+    }*/
+</script>
+
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Dashboard</title>
+    <style>
+        body {
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #253b43;
+            font-family: Arial, sans-serif;
+            padding: 0;
+        }
+
+        .flex-item {
+            flex: 1;
+            background-color: #3d4d5d;
+            color: #ecf0f1;
+            padding: 10px;
+            box-sizing: border-box;
+            margin: 5px;
+            height: 100%;
+            overflow: auto;
+        }
+
+        .flex-item h2 {
+            font-size: 24px;
+            margin-bottom: 0px;
+        }
+
+        .flex-item a {
+            color: #ecf0f1;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0px;
+            cursor: pointer;
+        }
+
+        iframe {
+            border: none;
+            height: 100vh;
+        }
+        
+        #MenuIframe {
+            width: 20%; 
+        }
+
+        #ShowIframe {
+            width: 77%;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="trdashboard" style="height: 100%; width: 100%; overflow: hidden;">
+    <iframe id="MenuIframe" src="menu-list.html" class="flex-item" frameborder="0" allowfullscreen style="overflow: hidden;"></iframe>
+    <iframe id="ShowIframe" src="show-area.html" class="flex-item" frameborder="0" allowfullscreen style="overflow: hidden;"></iframe>
+    </div>
+
+    <script>
+        document.addEventListener('keydown', function(event) {
+        if (event.key == "Escape") {
+                // hidetrdash();
+                window.close();
+        }});
+        function hidetrdash()
+        {
+        const modal = document.getElementById('trdashboard');
+        modal.style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" href="style_button.css">
+</head>
+<body>
+    <div style="display: flex;">
+        <div>
+            <div  style="margin-right: 2px;">
+                <button onclick="AVAILABLE()"class="button-33" role="button"id="test">AVL</button>
+                <button onclick="ENR()"class="button-33" role="button">ENR</button>
+                <button onclick="ARV()"class="button-33" role="button">ARV</button>
+                <button onclick="CLR()"class="button-33" role="button">CLR</button>
+                <button onclick="Out_of_Service()"class="button-33" role="button">OutofService</button>
+                <button onclick="Busy()"class="button-33" role="button">Busy</button>
+                <button onclick="MDT()"class="button-33" role="button">MDT</button>
+            </div>
+            <div style="display: flex;margin-top: 5px;">
+                <div id="messages" style="background-color: black;  flex-direction: row; width: 300px; height: 27px; overflow: hidden; margin-right:5px;">
+                </div>
+                <!-- <button onclick="readMessage()" style="width: 70px;padding: 7px 11px;"class="button-33" role="button"id ="mdt">MSG</button> -->
+                <button onclick="readMessage()" style="width: 70px;padding: 2px 9px;"class="button-33" role="button"id ="mdt">MSG</button>
+            </div>
+            <div style="background-color: black;  flex-direction: row; width: 375px; height: 27px; overflow: hidden; margin-top:5px;">
+                <h1 style="font-size: 13px; color: white;margin-left: 30px;">DISP:12003245346</h1>
+            </div>
+        </div>
+
+        <!-- img -->
+        <div style="margin-left: 10px; margin-right: 0px;">
+            <img src="img1.jpg" alt="Error Loading Image!!"style="width:125px;height:98px">
+        </div>
+    </div>
+
+<script>
+    document.addEventListener('keydown', function(event) {
+        if (event.key == "Escape") {
+                console.log("In the button.html keydowm");
+                const modal = parent.document.getElementById('mdtModal');
+                const model = parent.document.getElementById('framesContainer');
+                if (modal)
+                {
+                    modal.style.display = 'none';
+                }
+                else
+                {
+                    model.style.display = 'none';
+                }
+        }});
+    function AVAILABLE() {
+        fetch('https://' + 'CAD-'+ '/cad_AVL', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({data:"Available"}),
+        });
+    }
+    function ENR() {
+        fetch('https://' + 'CAD-'+ '/cad_enr', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({data:"Enroute"}),
+        });
+    }
+    function ARV() {
+        fetch('https://' + 'CAD-'+ '/cad_ARV', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({data:"Arrived"}),
+        });
+    }
+    function Out_of_Service() {
+        fetch('https://' + 'CAD-'+ '/cad_OOS', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({data:"Out of Service"}),
+        });
+    }
+    function Busy() {
+        fetch('https://' + 'CAD-'+ '/cad_Busy', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({data:"Busy"}),
+        });
+    }
+    function CLR() {
+        fetch('https://' + 'CAD-'+ '/cad_CLR', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({data: "Available"}),
+        });
+    }
+
+    function MDT() {
+        window.parent.openMDTModal();
+    }
+
+    
+    function readMessage(){
+        window.parent.toggleChatbox();
+    }
+</script>
+
+</body>
+</html>

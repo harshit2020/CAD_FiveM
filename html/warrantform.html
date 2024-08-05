@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WARRANT FORM</title>
+    <style>
+       body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 10px;
+            cursor: pointer;
+        }
+        form {
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input {
+            width: 49%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        #openFormButton {
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+    <!-- one main buttons -->
+    <div id ="budiv"style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
+        <h2>WARRANTS</h2><br>
+        <button onclick="rawarrant()" style="margin-bottom: 10px; font-size: 40px;">Register Warrant</button>
+    </div>
+    <div id="raw" style="display: none;">
+        <button id="hideFormButton" onclick="hideraw()">Back</button>
+        <button id="openFormButton2" onclick="toggleForm2()" style="margin-left: 160px;">Open Form</button>
+        <form id="myForm2" onsubmit="submitForm(event)">
+            <!-- <label for="entry1">Entry 1:</label> -->
+            <input type="text" id="entry1" name="entry1" placeholder="Name" required>
+            <input type="text" id="entry2" name="entry2" placeholder="Last Seen" required><br>
+            <input type="text" id="entry3" name="entry3" placeholder="Description" required>
+            <input type="text" id="entry4" name="entry4" placeholder="Reason of Intrest" required><br>
+            <input type="text" id="entry5" name="entry7" placeholder="Notes" style="margin-left: 145px;" required><br>
+            <button type="submit" id="submitBtn" style="margin-top: 10px;">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        var form2 = document.getElementById('myForm2');
+        var bu2 = document.getElementById("openFormButton2");
+        form2.style.display = 'none';
+
+        function toggleForm2(){
+            if(form2.style.display =='block'){
+                form2.style.display = 'none';
+                bu2.innerHTML='Open Form';
+                document.getElementById("entry1").value='';
+                document.getElementById("entry2").value='';
+                document.getElementById("entry3").value='';
+                document.getElementById("entry4").value='';
+                document.getElementById("entry7").value='';
+            }
+            else{
+                bu2.innerHTML='Discard Form';
+                form2.style.display = 'block'; 
+            }
+        }
+
+        function rawarrant(){
+            document.getElementById("budiv").style.display='none';
+            document.getElementById("raw").style.display='block'
+        }
+
+        function hideraw() {
+            document.getElementById("raw").style.display='none';
+            form2.style.display='none';
+            bu2.innerHTML='Open Form';
+            document.getElementById("budiv").style.display='block';
+            document.getElementById("budiv").style.display='flex';
+            document.getElementById("budiv").style.justifyContent='center';
+            document.getElementById("budiv").style.alignItems='center';
+        }
+        
+        function submitForm(event) {
+            event.preventDefault();
+            var entry1 = document.getElementById('entry1').value;
+            var entry2 = document.getElementById('entry2').value;
+            var entry3 = document.getElementById('entry3').value;
+            var entry4 = document.getElementById('entry4').value;
+            var entry5 = document.getElementById('entry5').value;
+
+            window.parent.postMessage({
+                type: 'formSubmission',
+                content: { entry1, entry2, entry3, entry4, entry5 }
+            }, '*');
+        }
+    </script>
+</body>
+</html>

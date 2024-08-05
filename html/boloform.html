@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOLO FORM</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 10px;
+            cursor: pointer;
+        }
+        form {
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input {
+            width: 49%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        #openFormButton {
+            vertical-align: top;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- two main buttons -->
+    <div id ="budiv"style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
+        <h2>Register Bolo</h2><br>
+        <button onclick="vointrest()" style="margin-bottom: 10px; font-size: 20px;">ADD Vehicle of Interest</button>
+        <button onclick="pointrest()" style="font-size: 20px;">ADD Person of Interest</button>
+    </div>
+    <!-- vehicle of intrest -->
+<div id="voi" style="display: none; overflow: hidden;">
+    <button id="hideFormButton" onclick="hidevoi()">Back</button>
+    <button id="openFormButton" onclick="toggleForm()" style="margin-left: 160px;">Open Form</button>
+    <form id="myForm" onsubmit="submitForm(event)">
+        <!-- <label for="entry1">Entry 1:</label> -->
+        <input type="text" id="entry1" name="entry1" placeholder="Vehicle Model" style="padding: 6px; margin-bottom: 6px;" required>
+        <input type="text" id="entry2" name="entry2" placeholder="License Plate"style="padding: 6px; margin-bottom: 6px;"  required><br>
+        <input type="text" id="entry3" name="entry3" placeholder="Vehicle Colour" style="padding: 6px; margin-bottom: 6px;"  required>
+        <input type="text" id="entry4" name="entry4" placeholder="Last Seen" style="padding: 6px; margin-bottom: 6px;" required><br>
+        <input type="text" id="entry5" name="entry5" placeholder="Vehicle Details" style="padding: 6px; margin-bottom: 6px;" required>
+        <input type="text" id="entry6" name="entry6" placeholder="Reson For Intrest" style="padding: 6px; margin-bottom: 6px;" required><br>
+        <input type="text" id="entry5" name="entry7" placeholder="Notes" style="margin-left: 145px;" required><br>
+        <button type="submit" id="submitBtn" style="margin-top: 10px;">Submit</button>
+    </form>
+</div>
+
+<!-- person of interest -->
+<div id="poi" style="display: none;">
+    <button id="hideFormButton" onclick="hidepoi()">Back</button>
+    <button id="openFormButton2" onclick="toggleForm2()" style="margin-left: 160px;">Open Form</button>
+    <form id="myForm2" onsubmit="submitForm(event)">
+        <!-- <label for="entry1">Entry 1:</label> -->
+        <input type="text" id="entry1" name="entry1" placeholder="Name" required>
+        <input type="text" id="entry2" name="entry2" placeholder="Last Seen" required><br>
+        <input type="text" id="entry3" name="entry3" placeholder="Description" required>
+        <input type="text" id="entry4" name="entry4" placeholder="Reason of Intrest" required><br>
+        <input type="text" id="entry5" name="entry7" placeholder="Notes" style="margin-left: 145px;" required><br>
+        <button type="submit" id="submitBtn" style="margin-top: 10px;">Submit</button>
+    </form>
+</div>
+
+    <script>
+        var form = document.getElementById('myForm');
+        var bu = document.getElementById("openFormButton");
+        form.style.display = 'none';
+        var form2 = document.getElementById('myForm2');
+        var bu2 = document.getElementById("openFormButton2");
+        form2.style.display = 'none';
+        function toggleForm() {
+            if(form.style.display =='block'){
+                form.style.display = 'none';
+                bu.innerHTML='Open Form';
+                document.getElementById("entry1").value='';
+                document.getElementById("entry2").value='';
+                document.getElementById("entry3").value='';
+                document.getElementById("entry4").value='';
+                document.getElementById("entry5").value='';
+                document.getElementById("entry6").value='';
+                document.getElementById("entry7").value='';
+            }
+            else{
+                bu.innerHTML='Discard Form';
+                form.style.display = 'block'; 
+            }
+            
+        }
+        function toggleForm2(){
+            if(form2.style.display =='block'){
+                form2.style.display = 'none';
+                bu2.innerHTML='Open Form';
+                document.getElementById("entry1").value='';
+                document.getElementById("entry2").value='';
+                document.getElementById("entry3").value='';
+                document.getElementById("entry4").value='';
+                document.getElementById("entry7").value='';
+            }
+            else{
+                bu2.innerHTML='Discard Form';
+                form2.style.display = 'block'; 
+            }
+        }
+
+        function submitForm(event) {
+            event.preventDefault();
+            var entry1 = document.getElementById('entry1').value;
+            var entry2 = document.getElementById('entry2').value;
+            var entry3 = document.getElementById('entry3').value;
+            var entry4 = document.getElementById('entry4').value;
+            var entry5 = document.getElementById('entry5').value;
+            var entry6 = document.getElementById('entry6').value;
+            var entry7 = document.getElementById('entry7').value;
+            window.parent.postMessage({
+                type: 'formSubmission',
+                content: { entry1, entry2, entry3, entry4, entry5, entry6, entry7 }
+            }, '*');
+        }
+
+        // opening poi and voi
+        function vointrest(){
+            document.getElementById("budiv").style.display='none';
+            document.getElementById("voi").style.display='block'
+        }
+        function pointrest(){
+            document.getElementById("budiv").style.display='none';
+            document.getElementById("poi").style.display='block'
+        }
+
+        //hide buttons
+        function hidevoi() {
+            document.getElementById("voi").style.display='none';
+            form.style.display='none';
+            bu.innerHTML='Open Form';
+            document.getElementById("budiv").style.display='block';
+            document.getElementById("budiv").style.display='flex';
+            document.getElementById("budiv").style.justifyContent='center';
+            document.getElementById("budiv").style.alignItems='center';
+        }
+        function hidepoi() {
+            document.getElementById("poi").style.display='none';
+            form2.style.display='none';
+            bu2.innerHTML='Open Form';
+            document.getElementById("budiv").style.display='block';
+            document.getElementById("budiv").style.display='flex';
+            document.getElementById("budiv").style.justifyContent='center';
+            document.getElementById("budiv").style.alignItems='center';
+        }
+    </script>
+</body>
+</html>

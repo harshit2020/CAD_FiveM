@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html> 
+<head>
+  <link rel = "stylesheet" href="style_frame.css">
+  <script src="script.js"></script>
+</head>
+<body style="overflow: hidden;">
+  <div id="framesContainer" style="display: none;background-color: #000000;width:535px;height:500px;overflow: hidden;">
+    <iframe id="unit" name="unit_frame" style="width:200%; height:38%; background-color: black;overflow: auto;border: 1px solid rgb(255, 255, 237);"></iframe>
+    <iframe id ="event" name="event_frame" style="width:200%; height:38%;background-color: black;overflow: auto;border:none;"></iframe>
+    <iframe id = "button"src="button.html" name="button_frame" style="width:100%; height:24%; border: none;background-color: rgb(255, 255, 237);overflow: hidden;"></iframe>
+  </div>
+
+  <div class="context-menu" id="contextMenu">
+    <button onclick="handleButtonClick('Accept Call')">Accept Call</button><br>
+    <button onclick="handleButtonClick('Reject Call')">Reject Call</button><br>
+    <button onclick="handleButtonClick('Call Backup')">Call Backup</button><br>
+    <button onclick="handleButtonClick('Put on Map')">Put on Map</button>
+    <button onclick="handleButtonClick('close')">Close</button>
+  </div>
+    <!-- The Modal -->
+    <div id="mdtModal">
+      <div id="mdtContent">
+          <iframe src="mdt.html" style="width:100%; height:100%; border: none;"></iframe>
+      </div>
+    </div>
+    <!-- chatbox -->
+    <div id="chatbox"style="border: 10px solid rgba(255, 255, 255, 0.2);">
+    <div style="height: 340px;margin-bottom: 5px;margin-top: 5px;">
+      <button id="old-message" style="margin-bottom: 5px;margin-top: 5px; width: 100%;box-sizing: border-box; background:rgba(255, 255, 255, 0.2); cursor: pointer; overflow: hidden;color: white;border: none;outline: none;" onclick="oldMessage()">OLD MESSAGES</button>
+      <div id="message-buttons"></div>
+  </div>
+  <button id="add-message-button" onclick="newMessagebox()"style="margin-top:10px;margin-bottom:5px">SEND NEW MESSAGE</button>
+    </div>
+    <!-- showfullmessages -->
+    <div id="smessage" style="display: none; border: 10px solid rgba(255, 255, 255, 0.2);background: rgba(0, 0, 0, 0.8); position: fixed; left: 370px; bottom: 10px; color: white; width: 300px; height: 250px; overflow: hidden; display: flex; flex-direction: column;">
+      <button id="close-smessage" style="margin: 5px 0 0 5px; cursor: pointer; background: rgba(255, 255, 255, 0.2); border: none; color: white; font-size: 16px;" onclick="closeSMessage()">✖</button>
+      <textarea id="fmessage" style="background: rgba(255, 255, 255, 0.2);width: 270px;display: flex;justify-content: center;align-items: center;margin-left: 15px;margin-top: 15px;margin-bottom: 15px;height: 150px;display: flex;overflow: hidden;resize: none;"></textarea>
+      <button id="reply" style="position: absolute; bottom: 5px; right: 5px; margin-bottom: 3px; margin-right: 3px; box-sizing: border-box; background: rgba(255, 255, 255, 0.2); cursor: pointer; overflow: hidden; color: white; border: none; outline: none; width: 50px; height: auto;padding:4px" onclick="newMessagebox()">REPLY</button>
+  </div>
+    
+    <!-- replyOrSendNewmessage -->
+    <div id="newmessage-box" style="display: none; border: 10px solid rgba(255, 255, 255, 0.2);background: rgba(0, 0, 0, 0.8); position: fixed; left: 370px; bottom: 10px; color: white; width: 300px; height: 300px; overflow: hidden; display: flex; flex-direction: column; border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 8px;">
+      <button id="close-smessage" style="margin: 5px 0 0 5px; cursor: pointer; background: rgba(255, 255, 255, 0.2); border: none; color: white; font-size: 16px;" onclick="closenewMessage()">✖</button><br>
+      <input type="text" id="from-input" placeholder="From" style="background: rgba(255, 255, 255, 0.2); border: none; color: white; padding: 8px; margin: 10px; border-radius: 4px;">
+      <hr style="border-top: 2px solid rgba(255, 255, 255, 0.2); margin: 0 10px;">
+      <input type="text" id="to-input" placeholder="To" style="background: rgba(255, 255, 255, 0.2); border: none; color: white; padding: 8px; margin: 10px; border-radius: 4px;">
+      <textarea id="message-input" placeholder="Message Content" style="width: 270px; height:85px;background: rgba(255, 255, 255, 0.2); border: none; color: white; margin: 10px; border-radius: 4px; overflow: hidden; resize: none;"></textarea>
+      <button id="send-button" style="margin: 10px; align-self: flex-end; padding: 8px; background: rgba(255, 255, 255, 0.2); border: none; color: white; border-radius: 4px; cursor: pointer;"onclick="sendMessage()">Send</button>
+    </div>
+  <!-- oldmessages -->
+  <div id="old-chatbox" style="display: none;border: 10px solid rgba(255, 255, 255, 0.2);">
+    <div style="height: 370px;margin-bottom: 5px;margin-top: 5px;">
+      <button id="close-smessage" style="margin: 5px 0 0 5px; cursor: pointer; background: rgba(255, 255, 255, 0.2); border: none; color: white; font-size: 16px;" onclick="backoldMessage()">&lt;</button><br>
+      <div id="old-message-buttons"></div>
+  </div>
+    </div>
+  
+  <!-- smallHiddenMenu -->
+  <div id="hiddenDiv" style="display: none; position: fixed; top: 10px; left: 10px; background-color: rgba(0, 0, 0, 0.8); color: white; padding: 10px; border-radius: 5px; font-size: 14px; text-align: center;">
+    Press <span style="font-weight: bold;">X</span> to show UI
+  </div>
+
+
+<script>
+  // ################################## ALL VARIABLES ########################################### //
+  let frame1 = 'unit';
+  let frame2 = 'event';   
+  let countold=0;
+  let countnew=0;
+  let contextMenu = document.getElementById('contextMenu');
+  let flag = false;
+  let flag2 = false;
+  let mdt_flag = false;
+  const hiddenDiv = document.getElementById('hiddenDiv');
+  hiddenDiv.style.display='none';
+  let messageArray={};
+  let no_messages = 9;
+  let offsetX, offsetY, isDragging = false;
+  const chatbox = document.getElementById('chatbox');
+  const messageButtons = document.getElementById('message-buttons');
+  const smessage = document.getElementById('smessage');
+  const messageContent = document.getElementById('fmessage');
+  smessage.style.display='none';
+  const newmessage = document.getElementById('newmessage-box');
+  newmessage.style.display='none';
+  let g_sender;
+  let g_to;
+  let meg_sender;
+  const createMess = document.getElementById("add-message-button");
+  const replyMess = document.getElementById("reply");
+  const oldmessage = document.getElementById("old-chatbox");
+  oldmessage.style.display='none';
+  const oldmessagebutton = document.getElementById("old-message-buttons");
+  //################################### Functions Start ######################################### //
+  function hideContextMenu() {
+    contextMenu.style.display = 'none';
+    flag = false;
+  }
+
+  function hidemdt()
+  {
+    const modal = document.getElementById('mdtModal');
+    modal.style.display = 'none';
+    flag2 = false;
+  }
+
+  function showContextMenu(e, cellValue) {
+    e.preventDefault();
+    if(cellValue == undefined){
+      hideContextMenu();
+      return;
+    }
+    const mouseX = e.screenX;
+    const mouseY = e.screenY;
+    const eventIframe = document.getElementById('event');
+    const elementUnderCursor = document.elementFromPoint(mouseX, mouseY);
+    if (elementUnderCursor === eventIframe) {
+      contextMenu.dataset.cellValue = cellValue;
+      console.log(cellValue);
+      contextMenu.style.left = mouseX + 'px';
+      contextMenu.style.top = mouseY + 'px';
+      contextMenu.style.display = 'block';
+    } 
+    else {
+      hideContextMenu();
+    }
+  }
+
+  function callEvent(name,data) {
+        fetch('https://' + GetParentResourceName() + '/' + name, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+    }
+  //button start
+  function handleButtonClick(action) {
+      switch (action) {
+        case 'Accept Call':
+          hideContextMenu();
+          callEvent("Accept_Event",contextMenu.dataset.cellValue);
+          break;
+        case 'Reject Call':
+          hideContextMenu();
+          //write the code
+          break;
+        case 'Call Backup':
+          hideContextMenu();
+          callEvent("Help_Me",{data:"Misc"});
+          break;
+        case 'Put on Map':
+          hideContextMenu();
+          callEvent("Get_GPS_Done",contextMenu.dataset.cellValue);
+          break;
+        case 'close':
+          hideContextMenu();
+        default:
+          // default case 
+          break;
+      }
+  }
+  //button end
+
+  function t_show(receivedData,frameID) {
+    // Create a dynamic table
+     let head;
+    if(frameID==frame1){
+      head = ['Unit','Status','Event','Location','Comment'];
+    }
+    else{   
+      head = ['Event','Status','Pri','Call_Type','Location','TimeOfCall'];
+    }
+    
+    const check = 'Status';
+    const table = document.createElement('table');
+
+    // Create the table header
+    const headerRow = document.createElement('tr');
+    head.forEach(key => {
+        let th = document.createElement('th');
+        th.textContent = key;
+        th.style.fontWeight = 'bold';
+        th.style.color = 'white';
+        th.style.padding = '8px';
+        th.style.bold
+        if(key=="Status"||key=="Event"){
+          th.style.textAlign='left';
+        }
+        if (key == "Location") {
+          th.style.paddingRight = '80px';
+        }
+        headerRow.appendChild(th);
+    });
+    table.appendChild(headerRow);
+
+    const tbody = document.createElement('tbody');
+    table.appendChild(tbody);
+
+    // Create the table rows with data
+    receivedData.forEach(obj => {
+        const row = document.createElement('tr');
+        head.forEach(value => {
+            let cell = document.createElement('td');
+            cell.textContent = obj[value];
+            cell.style.padding = '8px';
+            cell.style.fontWeight = 'normal';
+            switch (obj[check]){
+            case 'Active':
+              cell.style.color = 'rgb(101, 230, 129)';//Green
+              break;
+            case 'Misc':
+              cell.style.color = 'rgb(245, 37, 22)';//Red
+              break;
+            case 'Out of Service':
+              cell.style.color = 'rgb(46, 127, 219)';//Blue
+              break;
+            default:
+              cell.style.color = 'white';
+              break;
+            }
+            if(value == "Location"){
+              cell.style.paddingRight = '60px';
+            }
+            row.appendChild(cell);
+        });
+        table.appendChild(row);
+        if (frameID == frame2) {
+          const columnIndex = 0;
+          const cellsInColumn = table.querySelectorAll(`td:nth-child(${columnIndex + 1})`);
+          cellsInColumn.forEach(cell => {
+            const cellValue = cell.textContent;
+            cell.classList.add('hover-column');
+            cell.addEventListener('contextmenu', (e) => showContextMenu(e, cellValue));
+          });
+        }
+    });
+
+    const iframe = document.getElementById(frameID);
+
+    if (iframe) {
+        // Get the document inside the iframe
+        const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+
+        iframeDocument.body.appendChild(table);
+    } else {
+        console.error('Iframe not found.');
+    }
+  }
+
+  function removeTable(frameID) {
+      const iframe = document.getElementById(frameID);
+      if (iframe){
+        const table = iframe.contentDocument.querySelector('table');
+          if (table){
+          const parent = table.parentNode;
+          parent.removeChild(table);
+        }
+      } 
+    }
+
+  function showUi() {
+      document.getElementById("framesContainer").style.display = 'block';
+  }
+
+
+  let chatboxvisi = false;
+  function hideUi() {
+    removeTable(frame1);
+    removeTable(frame2);
+    document.getElementById("framesContainer").style.display = 'none';
+    var chatboxVisible = document.getElementById("chatbox");
+      if(chatboxVisible){
+        if(chatboxvisi){        
+        var if3 = document.getElementById("button");
+        var iframeDoc = if3.contentDocument || if3.contentWindow.document;
+        var buttonn = iframeDoc.getElementById("mdt");
+        buttonn.innerHTML='MSG';
+      }
+        chatboxvisi=false;
+        chatboxVisible.style.display='none';
+        oldmessage.style.display='none';
+        smessage.style.display='none';
+        newmessage.style.display='none';
+      }
+  }
+  hideUi();
+  function clearIframe(name) {
+    var iframe = document.getElementById(name);
+    iframe.src = 'about:blank';
+  }
+
+
+  //mdt 
+  function openMDTModal() {
+    const modal = document.getElementById('mdtModal');
+    const content = document.getElementById('mdtContent');
+    flag2 = true;
+    // Calculate the position dynamically based on screen size
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    const top = (screenHeight - 800)/2;
+    const left = (screenWidth - 1000)/2;
+
+    // Set the calculated position
+    modal.style.top = top + 'px';
+    modal.style.left = left + 'px';
+    modal.style.display = 'flex';
+  }
+
+  // chatbox code starts
+
+function updateArray(toggle,mess) // 1 pull messages from database, 0 send messages to database
+{
+  if(toggle){
+  fetch('https://' + 'CAD-'+ '/cad_MessRecv', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({data:"Available"}),
+        });
+      }
+  else
+  {
+    fetch('https://' + 'CAD-'+ '/cad_MessSend', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(mess), // variable which must be sent to the database
+        });
+      }
+
+}
+
+updateArray(1,null);
+
+if(chatboxvisi==false){document.getElementById('chatbox').style.display = 'none';}
+
+ // Simulate receiving messages and create buttons
+function reupdateChat(){
+          let m_sender;
+          if(countnew<10){
+          messageButtons.innerHTML='';
+          countnew=0;
+          for (let i = 0; i < messageArray.length; i++) {
+            if(messageArray[i].flag==0 && countnew<10){
+              m_sender = `${messageArray[i].sender} : ${messageArray[i].content}`;
+              const message = `${messageArray[i].content}`;
+              countnew=countnew+1;
+              createMessageButton(message,m_sender);
+            }
+          }
+          
+          }
+  }
+  //function for startup only
+  function updateNew_frame() {
+    var if3 = document.getElementById("button");
+    if3.addEventListener('load', function() {
+      var iframeDoc = if3.contentDocument || if3.contentWindow.document;
+      const messagesDiv = iframeDoc.getElementById("messages");
+      const newMessage = `<h1 style="font-size: 15px; color: white; margin-top: 5px; margin-left: 30px;">${countnew} New messages</h1>`;
+      if (messagesDiv) {
+          messagesDiv.style.display='none';
+          console.log("value of messages :",countnew);
+          messagesDiv.innerHTML = newMessage;
+          messagesDiv.style.display='block';
+      } else {
+          console.error("Element with id 'messages' not found in the iframe document.");
+      }
+});
+}
+
+  //function which calls updatenew whenever new message comes
+  function updateNew(){
+      var if3 = document.getElementById("button");
+      var iframeDoc = if3.contentDocument || if3.contentWindow.document;
+      const messagesDiv = iframeDoc.getElementById("messages");
+      const newMessage = `<h1 style="font-size: 15px; color: white; margin-top: 5px; margin-left: 30px;">${countnew} New messages</h1>`;
+      if (messagesDiv) {
+          messagesDiv.style.display='none';
+          messagesDiv.innerHTML = newMessage;
+          messagesDiv.style.display='block';
+      } else {
+          console.error("Element with id 'messages' not found in the iframe document.");
+      }
+  }
+
+function toggleChatbox() {
+    updateArray(1,null);
+    var if3 = document.getElementById("button");
+    var iframeDoc = if3.contentDocument || if3.contentWindow.document;
+    var buttonn = iframeDoc.getElementById("mdt");
+    if (buttonn.innerText == "MSG") {
+        buttonn.innerText = "CLOSE";
+        chatboxvisi = true;
+        chatbox.style.display = 'block';   
+    } else {
+        buttonn.innerText = "MSG";
+        chatboxvisi = false;
+        chatbox.style.display = 'none';
+        smessage.style.display='none';
+        newmessage.style.display='none';
+    }
+}
+
+    //send message
+    createMess.addEventListener('click',function(){
+        g_sender = meg_sender;
+        newMessagebox(g_sender,null);
+    });
+    //reply button
+    replyMess.addEventListener('click',function(){
+        g_sender = meg_sender;
+        newMessagebox(g_sender,g_to);
+        messageContent.innerHTML='';
+        g_to = 'null';
+    });
+
+    function oldMessage(message){
+        let m_sender;
+        if(countold<10){
+          oldmessagebutton.innerHTML='';
+          countold=0;
+        }
+
+        for(let i=0;i<messageArray.length;i++){
+            if(countold==10){//delete data from database and local array
+              oldmessagebutton.innerHTML='';
+              countold=0;
+            }
+            if(messageArray[i].flag==1&&countold<10){
+              m_sender= `${messageArray[i].sender} : ${messageArray[i].content}`;
+              const message  = `${messageArray[i].content}`;
+              countold=countold+1;
+              createoldMessageButton(message,m_sender);
+            }
+        }
+        
+        document.getElementById("chatbox").style.display='none';
+        oldmessage.style.display='block';
+    }
+
+function createMessageButton(message,m_sender){
+    const button = document.createElement('div');
+    button.className = 'message-button';
+    button.innerText = m_sender;
+    updateNew();
+    button.onclick = function () {
+        showFullMessage(message);
+    };
+    messageButtons.appendChild(button);
+}
+
+function createoldMessageButton(message,m_sender) {
+    const button = document.createElement('div');
+    button.className = 'old-message-button';
+    button.innerText = m_sender;
+    button.onclick = function () {
+        showOldFullMessage(message);
+    };
+    oldmessagebutton.appendChild(button);
+}
+
+
+function showOldFullMessage(message) {
+  let f;
+    let t;
+    for(let i=0;i<messageArray.length;i++){
+      if(messageArray[i].content==message){
+        f=messageArray[i].sender;
+        t=messageArray[i].receiver;
+      }
+    }
+    newmessage.style.display='none';
+    messageContent.innerHTML='';
+    messageContent.style.color='white';
+    messageContent.innerHTML += `${message}`;
+    smessage.style.display = 'block';
+    g_sender = t;
+    g_to = f;
+}
+function showFullMessage(message) {
+    countnew=countnew-1;
+    let f;
+    let t;
+    for(let i=0;i<messageArray.length;i++){
+      if(messageArray[i].content==message && messageArray[i].flag==0){
+        messageArray[i].flag=1;
+        //call to update the flag of the unread message in database
+        f=messageArray[i].sender;
+        t=messageArray[i].receiver;
+        break;
+      }
+    }
+    reupdateChat();
+    updateNew();
+    messageContent.innerHTML='';
+    messageContent.style.color='white';
+    messageContent.innerHTML += `${message}`;
+    newmessage.style.display='none';
+    smessage.style.display = 'block';
+    g_sender = t;
+    g_to = f;
+}
+
+function newMessagebox(from,receiver) {
+  const efrom = document.getElementById('from-input');
+  const eto = document.getElementById('to-input');
+  let mess = document.getElementById("message-input");
+  mess.value='';
+  if(receiver!='null'){
+    eto.value =receiver;
+  }
+  else{
+    eto.placeholder="Receiver Name";
+  }
+  efrom.value=from;
+  smessage.style.display='none';
+  newmessage.style.display='block';
+}
+function closeSMessage() {
+    const smessage = document.getElementById('smessage');
+    const messageContent = document.getElementById('fmessage');
+    messageContent.innerHTML='';
+    smessage.style.display = 'none';
+    messageContent.innerHTML = '';
+}
+function closenewMessage() {
+   newmessage.style.display='none';
+}
+function backoldMessage() {
+   oldmessage.style.display='none';
+   document.getElementById("chatbox").style.display='block';
+}
+  
+function sendMessage(){
+      let send = document.getElementById("from-input").value;
+      let recv = document.getElementById("to-input").value;
+      let mess = document.getElementById("message-input").value;
+      let newmess = {sender:send,receiver:recv,content:mess,flag:0};
+      mess.value='';
+      updateArray(0,newmess);
+      newmessage.style.display='none';
+      //will create a small window which will display sent then disappear
+    } 
+//chatbox code ends
+
+//draggable frameContainer
+const framesContainer = document.getElementById('framesContainer');
+
+function startDrag(e) {
+      isDragging = true;
+      offsetX = e.screenX - framesContainer.getBoundingClientRect().left;
+      offsetY = e.screenY - framesContainer.getBoundingClientRect().top;
+      document.addEventListener('mousemove', drag);
+      document.addEventListener('mouseup', stopDrag);
+    }
+
+    function drag(e) {
+      if (isDragging) {
+        e.preventDefault();
+        const x = Math.max(0, Math.min(e.screenX - offsetX, window.innerWidth - framesContainer.clientWidth));
+        const y = Math.max(0, Math.min(e.screenY - offsetY, window.innerHeight - framesContainer.clientHeight));
+        framesContainer.style.left = `${x}px`;
+        framesContainer.style.top = `${y}px`;
+      }
+    }
+
+    function stopDrag() {
+      isDragging = false;
+      document.removeEventListener('mousemove', drag);
+      document.removeEventListener('mouseup', stopDrag);
+    }
+
+    function isBorderClick(e) {
+      const borderWidth = parseInt(getComputedStyle(framesContainer).borderWidth, 10);
+      const rect = framesContainer.getBoundingClientRect();
+
+      return (
+        e.screenX >= rect.left && e.screenX <= rect.left + borderWidth ||
+        e.screenX <= rect.right && e.screenX >= rect.right - borderWidth ||
+        e.screenY >= rect.top && e.screenY <= rect.top + borderWidth ||
+        e.screenY <= rect.bottom && e.screenY >= rect.bottom - borderWidth
+      );
+    }
+
+document.addEventListener('mousedown', (e) => {
+      if (e.button == 0 && isBorderClick(e)) { 
+        startDrag(e);
+      }
+    });
+//end draggable code
+
+//################################################## ACTIVE LISTENERS ############################################################## //
+  document.addEventListener('click', hideContextMenu());
+  document.addEventListener('contextmenu', showContextMenu);
+  document.getElementById('framesContainer').addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    hideContextMenu();
+  });
+  
+  document.addEventListener('keydown', function(event) {
+    if (event.key == "Escape") {
+      if (flag){
+        hideContextMenu(); 
+      }
+      hideUi();
+      
+      hiddenDiv.style.display = 'block';
+      fetch('https://' + GetParentResourceName() + '/Nui', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      });
+      if(flag2){
+        hidemdt();
+      }
+    }
+
+    if (event.key == "x" || event.key == "X") {
+      fetch('https://' + GetParentResourceName() + '/Nuiopen', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      });
+        showUi();
+    }
+
+  });
+
+  window.addEventListener('click', function(event) {
+      const modal = document.getElementById('mdtModal');
+      if (event.target === modal) {
+          modal.style.display = 'none';
+       }
+  });
+  window.addEventListener('message', event => {
+    switch (event.data.type) {
+      case 'showUi':
+        showUi();
+        break;
+      case 'hideUi':
+        hideUi();
+        break;
+      case 'updateData':
+        removeTable(frame1)
+        t_show(JSON.parse(event.data.data),frame1);
+        break;
+      case 'updateEvent':
+        removeTable(frame2)
+        t_show(JSON.parse(event.data.data),frame2);
+          break;
+      case 'mdt_receive_user': 
+      //event.data.data
+      break;
+      case 'update_messages' : 
+          messageArray = JSON.parse(event.data.data);
+          meg_sender=messageArray[0].receiver;
+          reupdateChat();
+          updateNew_frame();
+          break;
+      case 'registration_success':
+         console.log("Frame callback received")
+     }
+   });
+
+  </script>
+</body>
+</html>

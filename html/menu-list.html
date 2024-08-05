@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu List</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #menu {
+            display: flex;
+            flex-direction: column;
+            background-color: #f59a32;
+            padding: 10px;
+            height: 100%;
+        }
+
+        #menu button {
+            margin-right: 0;
+            background-color: #000000;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+
+        .profile-container {
+            text-align: center;
+            background-color: #f59a32;
+            padding: 5px;
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-container img {
+            width: 200px;
+            height: 90px;
+            border-radius: 10%;
+            margin-bottom: 8px;
+        }
+
+        .profile-container h4 {
+            color: #333;
+            margin: 0;
+        }
+
+        #myModal {
+            display: none;
+            position: fixed;
+            height: 80px;
+            width: 100px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #f59a32;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #inputField {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        #closeButton {
+            background-color: #000000;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <img src=".jpg">
+        <h4>SGRP<br>SERVICES GROUP</h4>
+    </div><br>
+    <div id="menu">
+        <button onclick="tableloadPage()">TABLES</button><br>
+        <button onclick="bololoadPage('')">BOLO</button><br>
+        <button onclick="warrantloadPage('')">WARRANTS</button><br>
+        <button onclick="activity('')">ACTIVITY</button><br>
+        <button onclick="databse('')">DATABASE</button><br>
+    </div><br>
+    <div id="menu">
+        <button id="onduty"onclick="openModal()">Go On Duty</button><br>
+        <button onclick="loadPage('')">Settings</button><br>
+        <button onclick="loadPage('')">Quit</button><br>
+    </div>
+    <div id="myModal">
+        <input type="text" id="inputField" placeholder="Enter CallSign">
+        <br>
+        <button id="offduty" onclick="Go_OnDuty('inputField.value')" style="margin-left: 20px;">Submit</button>
+    </div>
+    <script>
+        function Go_OnDuty(data) {
+            document.getElementById('myModal').style.display = 'block';
+            fetch('https://' + 'CAD-'+ '/Register_Callsign', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: data,
+            });
+            document.getElementById('myModal').style.display = 'none';
+            var button = document.getElementById('onduty');
+            button.innerHTML = 'Go Off Duty';
+            button.style.backgroundColor = 'turquoise';
+            button.style.color = 'black';
+        }
+        document.addEventListener('keydown', function(event) {
+        if (event.key == "Escape") {
+            console.log("Inside menu list Escape event")
+            const modal = parent.parent.document.getElementById('mdtModal');
+            modal.style.display = 'none';
+                
+        }});
+        function tableloadPage(){
+        const parentWindow = window.parent;
+        const iframe2Window = parentWindow.document.getElementById('ShowIframe').contentWindow;
+        iframe2Window.showtablefnc();
+        }
+        function bololoadPage(){
+        const parentWindow = window.parent;
+        const iframe2Window = parentWindow.document.getElementById('ShowIframe').contentWindow;
+        iframe2Window.showbolofnc();
+        }
+        function warrantloadPage(){
+        const parentWindow = window.parent;
+        const iframe2Window = parentWindow.document.getElementById('ShowIframe').contentWindow;
+        iframe2Window.showwarrantfnc();
+        }
+
+        function activity(){
+        const parentWindow = window.parent;
+        const iframe2Window = parentWindow.document.getElementById('ShowIframe').contentWindow;
+        iframe2Window.showactivity();
+        }
+
+        function openModal() {
+            var button = document.getElementById('onduty');
+            if(button.innerHTML == 'Go On Duty'){
+                document.getElementById('myModal').style.display = 'block';
+            }
+            else{
+                button.innerHTML = 'Go On Duty';
+                button.style.backgroundColor = 'black';
+                button.style.color = 'white';
+            }
+        }
+
+    </script> 
+
+</body>
+</html>
